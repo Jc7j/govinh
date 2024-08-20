@@ -1,11 +1,15 @@
 import React from 'react';
 import SelectCard from '../SelectCard';
 
+type PropertyType = 'Residential' | 'Commercial' | '';
+type Purpose = 'Primary' | 'Investment' | 'Vacation Home' | 'Family Home' | '';
+type Action = 'Buy' | 'Sell' | 'Rent' | '';
+
 interface PropertyInfoProps {
   formData: {
-    propertyType: 'Residential' | 'Commercial';
-    purpose: 'Primary' | 'Investment' | 'Vacation Home' | 'Family Home';
-    action: 'Buy' | 'Sell' | 'Rent';
+    propertyType: PropertyType;
+    purpose: Purpose;
+    action: Action;
   };
   handleInputChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -21,7 +25,9 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
       <p className="text-gray-600 mb-6">Please provide details about the property you&apos;re interested in.</p>
       <div className="space-y-6">
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">Residential or Commercial?</label>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Residential or Commercial? <span className="text-red-500">*</span>
+          </label>
           <div className="grid grid-cols-2 gap-4">
             <SelectCard
               label="Residential"
@@ -38,7 +44,9 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
           </div>
         </div>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">Purpose</label>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Purpose <span className="text-red-500">*</span>
+          </label>
           <div className="grid grid-cols-2 gap-4">
             {['Primary', 'Investment', 'Vacation Home', 'Family Home'].map((purpose) => (
               <SelectCard
@@ -52,7 +60,9 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
           </div>
         </div>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">Buy, Sell, or Rent</label>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Buy, Sell, or Rent <span className="text-red-500">*</span>
+          </label>
           <div className="grid grid-cols-3 gap-4">
             {['Buy', 'Sell', 'Rent'].map((action) => (
               <SelectCard

@@ -18,7 +18,9 @@ export default function PersonalInfo({ formData, handleInputChange }: PersonalIn
       <div className="space-y-4 sm:space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block mb-1 text-sm font-medium text-gray-700">First Name</label>
+            <label htmlFor="firstName" className="block mb-1 text-sm font-medium text-gray-700">
+              First Name <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               id="firstName"
@@ -31,7 +33,9 @@ export default function PersonalInfo({ formData, handleInputChange }: PersonalIn
             />
           </div>
           <div>
-            <label htmlFor="lastName" className="block mb-1 text-sm font-medium text-gray-700">Last Name</label>
+            <label htmlFor="lastName" className="block mb-1 text-sm font-medium text-gray-700">
+              Last Name <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               id="lastName"
@@ -45,7 +49,9 @@ export default function PersonalInfo({ formData, handleInputChange }: PersonalIn
           </div>
         </div>
         <div>
-          <label htmlFor="phoneNumber" className="block mb-1 text-sm font-medium text-gray-700">Phone Number</label>
+          <label htmlFor="phoneNumber" className="block mb-1 text-sm font-medium text-gray-700">
+            Phone Number <span className="text-red-500">*</span>
+          </label>
           <input
             type="tel"
             id="phoneNumber"
@@ -58,7 +64,9 @@ export default function PersonalInfo({ formData, handleInputChange }: PersonalIn
           />
         </div>
         <div>
-          <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">Email Address</label>
+          <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">
+            Email Address <span className="text-red-500">*</span>
+          </label>
           <input
             type="email"
             id="email"

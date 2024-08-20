@@ -10,31 +10,62 @@ const ResidentialForm = dynamic(() => import('./steps/ResidentialForm'), { ssr: 
 
 const steps = ['Personal Info', 'Property Info', 'Additional Info'];
 
+type PropertyType = 'Residential' | 'Commercial' | '';
+type Purpose = 'Primary' | 'Investment' | 'Vacation Home' | 'Family Home' | '';
+type Action = 'Buy' | 'Sell' | 'Rent' | '';
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  propertyType: PropertyType;
+  purpose: Purpose;
+  action: Action;
+}
+
 export default function MultiStepForm() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     phoneNumber: '',
     email: '',
-    propertyType: '' as 'Residential' | 'Commercial',
-    purpose: '' as 'Primary' | 'Investment' | 'Vacation Home' | 'Family Home',
-    action: '' as 'Buy' | 'Sell' | 'Rent',
+    propertyType: '',
+    purpose: '',
+    action: '',
   });
-  const [isValid, setIsValid] = useState(false);
+  const [stepValidity, setStepValidity] = useState({
+    0: false,
+    1: false,
+    2: true, // Assuming the last step doesn't need validation
+  });
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  const validatePersonalInfo = () => {
+    const { firstName, lastName, phoneNumber, email } = formData;
+    return firstName.trim() !== '' && lastName.trim() !== '' && phoneNumber.trim() !== '' && email.trim() !== '';
+  };
+
+  const validatePropertyInfo = () => {
+    const { propertyType, purpose, action } = formData;
+    return propertyType !== '' && purpose !== '' && action !== '';
+  };
+
   useEffect(() => {
-    // Implement validation logic here
-    setIsValid(true); // For now, always set to true
-  }, [formData]);
+    if (currentStep === 0) {
+      setStepValidity(prev => ({ ...prev, 0: validatePersonalInfo() }));
+    } else if (currentStep === 1) {
+      setStepValidity(prev => ({ ...prev, 1: validatePropertyInfo() }));
+    }
+  }, [formData, currentStep]);
 
   const handleNext = () => {
-    if (isValid) {
+    if (stepValidity[currentStep as keyof typeof stepValidity]) {
       setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
     }
   };
@@ -97,7 +128,7 @@ export default function MultiStepForm() {
           </button>
           <button
             onClick={handleNext}
-            disabled={currentStep === steps.length - 1 || !isValid}
+            disabled={currentStep === steps.length - 1 || !stepValidity[currentStep as keyof typeof stepValidity]}
             className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
           >
             {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
