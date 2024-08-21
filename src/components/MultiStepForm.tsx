@@ -15,13 +15,35 @@ type Purpose = 'Primary' | 'Investment' | 'Vacation Home' | 'Family Home' | '';
 type Action = 'Buy' | 'Sell' | 'Rent' | '';
 
 interface FormData {
+  // Personal Info
   firstName: string;
   lastName: string;
   phoneNumber: string;
   email: string;
+
+  // Property Info
   propertyType: PropertyType;
   purpose: Purpose;
   action: Action;
+
+  // Residential Info
+  area?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  stories?: string;
+  garages?: string;
+  streetAddress?: string;
+  reasonForSelling?: string;
+  timelineToSell?: string;
+
+  // Commercial Info
+  typeOfBusiness?: string;
+  propertyGoals?: string;
+  location?: string;
+
+  // Common fields for both Residential and Commercial
+  priceRange?: string;
+  sqft?: string;
 }
 
 export default function MultiStepForm() {
@@ -34,13 +56,28 @@ export default function MultiStepForm() {
     propertyType: '',
     purpose: '',
     action: '',
+    area: '',
+    bedrooms: '',
+    bathrooms: '',
+    stories: '',
+    garages: '',
+    streetAddress: '',
+    reasonForSelling: '',
+    timelineToSell: '',
+    typeOfBusiness: '',
+    propertyGoals: '',
+    location: '',
+    priceRange: '',
+    sqft: '',
   });
   const [stepValidity, setStepValidity] = useState({
     0: false,
     1: false,
-    2: true, // Assuming the last step doesn't need validation
+    2: false,
   });
   const [isClient, setIsClient] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -56,11 +93,22 @@ export default function MultiStepForm() {
     return propertyType !== '' && purpose !== '' && action !== '';
   };
 
+  const validateAdditionalInfo = () => {
+    if (formData.propertyType === 'Residential') {
+      return formData.area !== '' && formData.priceRange !== '' && formData.bedrooms !== '' && formData.bathrooms !== '' && formData.sqft !== '';
+    } else if (formData.propertyType === 'Commercial') {
+      return formData.typeOfBusiness !== '' && formData.propertyGoals !== '' && formData.priceRange !== '' && formData.sqft !== '' && formData.location !== '';
+    }
+    return false;
+  };
+
   useEffect(() => {
     if (currentStep === 0) {
       setStepValidity(prev => ({ ...prev, 0: validatePersonalInfo() }));
     } else if (currentStep === 1) {
       setStepValidity(prev => ({ ...prev, 1: validatePropertyInfo() }));
+    } else if (currentStep === 2) {
+      setStepValidity(prev => ({ ...prev, 2: validateAdditionalInfo() }));
     }
   }, [formData, currentStep]);
 
@@ -98,6 +146,38 @@ export default function MultiStepForm() {
     }
   };
 
+  const handleSubmit = async () => {
+    setSubmitStatus('submitting');
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch('/api/submitForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Form submitted successfully:', result);
+        setSubmitStatus('success');
+        // Reset form or navigate to thank you page
+        // setFormData({ ... }); // Reset form data if needed
+      } else {
+        const errorData = await response.json();
+        console.error('Form submission failed:', errorData);
+        setSubmitStatus('error');
+        setErrorMessage(errorData.message || 'An error occurred while submitting the form.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    }
+  };
+
   if (!isClient) return null;
 
   return (
@@ -118,20 +198,35 @@ export default function MultiStepForm() {
           ))}
         </div>
         {renderStep()}
+        
+        {submitStatus === 'success' && (
+          <div className="mt-4 p-4 bg-green-100 text-green-700 rounded">
+            Thank you for submitting your information. We&apos;ll be in touch soon!
+          </div>
+        )}
+        
+        {submitStatus === 'error' && (
+          <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
+            {errorMessage || 'An error occurred. Please try again.'}
+          </div>
+        )}
+
         <div className="mt-8 flex justify-between">
           <button
             onClick={handlePrev}
-            disabled={currentStep === 0}
+            disabled={currentStep === 0 || submitStatus === 'submitting'}
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
           >
             Back
           </button>
           <button
-            onClick={handleNext}
-            disabled={currentStep === steps.length - 1 || !stepValidity[currentStep as keyof typeof stepValidity]}
+            onClick={currentStep === steps.length - 1 ? handleSubmit : handleNext}
+            disabled={!stepValidity[currentStep as keyof typeof stepValidity] || submitStatus === 'submitting'}
             className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
           >
-            {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
+            {currentStep === steps.length - 1 
+              ? (submitStatus === 'submitting' ? 'Submitting...' : 'Submit') 
+              : 'Next'}
           </button>
         </div>
       </div>
