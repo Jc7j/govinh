@@ -181,7 +181,7 @@ export default function MultiStepForm() {
   if (!isClient) return null;
 
   return (
-    <div className="md:w-[640px] max-w-6xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="md:w-[640px] max-w-6xl mx-auto bg-white  rounded-lg shadow-md overflow-hidden">
       <div className="p-4 sm:p-6">
         <h2 className="text-md text-center font-semibold mb-4 text-gray-800">What can we help with?</h2>
         <hr className="mb-4" />

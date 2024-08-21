@@ -18,7 +18,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextUIProvider>{children}</NextUIProvider>
+        <div className="video-background">
+          <video autoPlay loop muted playsInline>
+            <source src="/LV-RealEstate-Scenery.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div className="content-overlay">
+          <NextUIProvider>{children}</NextUIProvider>
+        </div>
       </body>
     </html>
   );

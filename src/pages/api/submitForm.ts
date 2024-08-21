@@ -62,7 +62,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       parent: { database_id: databaseId },
       properties: properties,
     });
-
+    console.log("responseresponse",response)
+    
     console.log("New row created in Notion table:", response.id);
     res.status(200).json({ message: 'Form submitted successfully', response });
   } catch (error: any) {

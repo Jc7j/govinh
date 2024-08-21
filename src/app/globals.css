@@ -26,6 +26,37 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.video-background {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
+
+/* .content-overlay {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+   background-color: rgba(255, 255, 255, 0.); 
+} */
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
