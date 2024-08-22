@@ -3,8 +3,6 @@ import { Client } from '@notionhq/client';
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_DATABASE_ID;
-console.log("databaseId", databaseId);
-console.log("notion", notion);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -37,20 +35,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       'Square Feet': formData.sqft ? { number: parseInt(formData.sqft) } : undefined,
     };
 
-    // Add Residential or Commercial specific fields
+    // Add Residential specific fields
     if (formData.propertyType === 'Residential') {
-      if (formData.area) properties['Area'] = { select: { name: formData.area } };
-      if (formData.bedrooms) properties['Bedrooms'] = { number: parseInt(formData.bedrooms) };
-      if (formData.bathrooms) properties['Bathrooms'] = { number: parseInt(formData.bathrooms) };
-      if (formData.stories) properties['Stories'] = { number: parseInt(formData.stories) };
-      if (formData.garages) properties['Garages'] = { number: parseInt(formData.garages) };
-      if (formData.streetAddress) properties['Street Address'] = { rich_text: [{ text: { content: formData.streetAddress } }] };
-      if (formData.reasonForSelling) properties['Reason for Selling'] = { select: { name: formData.reasonForSelling } };
-      if (formData.timelineToSell) properties['Timeline to Sell'] = { select: { name: formData.timelineToSell } };
+      if (formData.action === 'Sell') {
+        if (formData.streetAddress) properties['Street Address'] = { rich_text: [{ text: { content: formData.streetAddress } }] };
+        if (formData.reasonForSelling) properties['Reason for Selling'] = { select: { name: formData.reasonForSelling } };
+        if (formData.timelineToSell) properties['Timeline to Sell'] = { select: { name: formData.timelineToSell } };
+      } else {
+        // This covers both 'Buy' and 'Rent/Lease' actions
+        if (formData.area) properties['Area'] = { select: { name: formData.area } };
+        if (formData.bedrooms) properties['Bedrooms'] = { number: parseInt(formData.bedrooms) };
+        if (formData.bathrooms) properties['Bathrooms'] = { number: parseInt(formData.bathrooms) };
+        if (formData.stories) properties['Stories'] = { number: parseInt(formData.stories) };
+        if (formData.garages) properties['Garages'] = { number: parseInt(formData.garages) };
+        
+        // Rename 'Price Range' to 'Monthly Rent' for 'Rent/Lease' action
+        if (formData.action === 'Rent/Lease') {
+          properties['Monthly Rent'] = properties['Price Range'];
+          delete properties['Price Range'];
+        }
+      }
     } else if (formData.propertyType === 'Commercial') {
-      if (formData.typeOfBusiness) properties['Type of Business'] = { select: { name: formData.typeOfBusiness } };
-      if (formData.propertyGoals) properties['Property Goals'] = { select: { name: formData.propertyGoals } };
-      if (formData.location) properties['Location'] = { select: { name: formData.location } };
+      // Add Commercial specific fields here if needed
     }
 
     // Remove any undefined properties
@@ -62,7 +68,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       parent: { database_id: databaseId },
       properties: properties,
     });
-    console.log("responseresponse",response)
     
     console.log("New row created in Notion table:", response.id);
     res.status(200).json({ message: 'Form submitted successfully', response });

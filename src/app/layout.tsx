@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="video-background">
           <video autoPlay loop muted playsInline>
-            <source src="/LV-RealEstate-Scenery.mp4" type="video/mp4" />
+            <source src="https://res.cloudinary.com/ds9k7nemd/video/upload/v1724302607/7578547-uhd_3840_2160_30fps_oolnxo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
