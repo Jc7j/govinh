@@ -168,7 +168,6 @@ export default function MultiStepForm() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Form submitted successfully:', result);
         setSubmitStatus('success');
         setCurrentStep(3); // Move to the Thank You step
       } else {

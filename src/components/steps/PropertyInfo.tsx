@@ -22,7 +22,7 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold mb-2 text-gray-800">Property Information</h2>
-      <p className="text-gray-600 mb-6">Please provide details about the property you&apos;re interested in.</p>
+      <p className="text-gray-600 mb-6">Select whether you need assistance with residential or commercial properties, specify the goals of the property, and the action you need assistance with.</p>
       <div className="space-y-6">
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">

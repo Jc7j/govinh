@@ -187,7 +187,11 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-      <h2 className="text-2xl font-bold text-gray-900">Residential Property Details</h2>
+      <h2 className="text-2xl font-bold text-gray-900">
+        {formData.action === 'Sell' && 'Residential Selling Details'}
+        {formData.action === 'Buy' && 'Residential Buying Details'}
+        {formData.action === 'Rent' && 'Residential Renting Details'}
+      </h2>
       {formData.action === 'Sell' && (
         <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
           Help us understand your property and your reasons for selling.
