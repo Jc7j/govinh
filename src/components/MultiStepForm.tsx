@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import PersonalInfo from './steps/PersonalInfo';
 import PropertyInfo from './steps/PropertyInfo';
+import ThankYouStep from './steps/ThankYouStep';
 
 const CommercialForm = dynamic(() => import('./steps/CommercialForm'), { ssr: false });
 const ResidentialForm = dynamic(() => import('./steps/ResidentialForm'), { ssr: false });
 
-const steps = ['Personal Info', 'Property Info', 'Additional Info'];
+const steps = ['Personal Info', 'Property Info', 'Additional Info', 'Thank You'];
 
 type PropertyType = 'Residential' | 'Commercial' | '';
 type Purpose = 'Primary' | 'Investment' | 'Vacation Home' | 'Family Home' | '';
@@ -145,6 +146,8 @@ export default function MultiStepForm() {
         ) : (
           <CommercialForm formData={formData} handleInputChange={handleInputChange} />
         );
+      case 3:
+        return <ThankYouStep />;
       default:
         return null;
     }
@@ -167,8 +170,7 @@ export default function MultiStepForm() {
         const result = await response.json();
         console.log('Form submitted successfully:', result);
         setSubmitStatus('success');
-        // Reset form or navigate to thank you page
-        // setFormData({ ... }); // Reset form data if needed
+        setCurrentStep(3); // Move to the Thank You step
       } else {
         const errorData = await response.json();
         console.error('Form submission failed:', errorData);
@@ -202,36 +204,32 @@ export default function MultiStepForm() {
         </div>
         {renderStep()}
         
-        {submitStatus === 'success' && (
-          <div className="mt-4 p-4 bg-green-100 text-green-700 rounded">
-            Thank you for submitting your information. We&apos;ll be in touch soon!
-          </div>
-        )}
-        
         {submitStatus === 'error' && (
           <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
             {errorMessage || 'An error occurred. Please try again.'}
           </div>
         )}
 
-        <div className="mt-8 flex justify-between">
-          <button
-            onClick={handlePrev}
-            disabled={currentStep === 0 || submitStatus === 'submitting'}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-          >
-            Back
-          </button>
-          <button
-            onClick={currentStep === steps.length - 1 ? handleSubmit : handleNext}
-            disabled={!stepValidity[currentStep as keyof typeof stepValidity] || submitStatus === 'submitting'}
-            className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-          >
-            {currentStep === steps.length - 1 
-              ? (submitStatus === 'submitting' ? 'Submitting...' : 'Submit') 
-              : 'Next'}
-          </button>
-        </div>
+        {currentStep < 3 && (
+          <div className="mt-8 flex justify-between">
+            <button
+              onClick={handlePrev}
+              disabled={currentStep === 0 || submitStatus === 'submitting'}
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+            >
+              Back
+            </button>
+            <button
+              onClick={currentStep === steps.length - 2 ? handleSubmit : handleNext}
+              disabled={!stepValidity[currentStep as keyof typeof stepValidity] || submitStatus === 'submitting'}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+            >
+              {currentStep === steps.length - 2 
+                ? (submitStatus === 'submitting' ? 'Submitting...' : 'Submit') 
+                : 'Next'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

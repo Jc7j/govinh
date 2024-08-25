@@ -11,7 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const formData = req.body;
-    console.log("Received form data:", formData);
 
     if (!databaseId) {
       throw new Error('NOTION_DATABASE_ID is not set');
@@ -35,7 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       'Square Feet': formData.sqft ? { number: parseInt(formData.sqft) } : undefined,
     };
 
-    // Add Residential specific fields
     if (formData.propertyType === 'Residential') {
       if (formData.action === 'Sell') {
         if (formData.streetAddress) properties['Street Address'] = { rich_text: [{ text: { content: formData.streetAddress } }] };
@@ -56,13 +54,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
     } else if (formData.propertyType === 'Commercial') {
-      // Add Commercial specific fields here if needed
+      if (formData.typeOfBusiness) properties['Type of Business'] = { select: { name: formData.typeOfBusiness } };
+      if (formData.propertyGoals) properties['Property Goals'] = { select: { name: formData.propertyGoals } };
+      if (formData.location) properties['Location'] = { select: { name: formData.location } };
+      
+      // Update 'Purpose' field (already exists in common fields)
+      if (formData.purpose) properties['Purpose'] = { select: { name: formData.purpose } };
+      
     }
 
     // Remove any undefined properties
     Object.keys(properties).forEach(key => properties[key] === undefined && delete properties[key]);
 
-    console.log("Sending to Notion:", properties);
 
     const response = await notion.pages.create({
       parent: { database_id: databaseId },

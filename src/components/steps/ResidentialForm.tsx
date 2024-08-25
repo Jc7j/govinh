@@ -31,7 +31,7 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
     <>
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">Area <span className="text-red-500">*</span></label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid md:grid-cols-3 gap-2">
           {areaOptions.map((area) => (
             <SelectCard
               key={area}
@@ -58,7 +58,7 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
           required
         />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="bedrooms" className="block mb-1 text-sm font-medium text-gray-700">
             Bedrooms <span className="text-red-500">*</span>
@@ -107,7 +107,7 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
       </div>
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">How Many Stories <span className="text-red-500">*</span></label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid md:grid-cols-3 gap-2">
           {storiesOptions.map((story) => (
             <SelectCard
               key={story}
@@ -121,7 +121,7 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
       </div>
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">How Many Garages <span className="text-red-500">*</span></label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid md:grid-cols-3 gap-2">
           {garagesOptions.map((garage) => (
             <SelectCard
               key={garage}
@@ -155,7 +155,7 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
       </div>
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">Reason for Selling <span className="text-red-500">*</span></label>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid md:grid-cols-2 gap-2">
           {['Buying Another home', 'Relocating to another city', 'Selling to get out of the market', 'Selling to upgrade investment'].map((reason) => (
             <SelectCard
               key={reason}
@@ -169,7 +169,7 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
       </div>
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">Timeline to Sell <span className="text-red-500">*</span></label>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid md:grid-cols-2 gap-2">
           {['ASAP', 'Within 1-2 months', '3-4 months', '5-6 months', 'Long-Term Plan'].map((timeline) => (
             <SelectCard
               key={timeline}
@@ -185,8 +185,25 @@ const ResidentialForm: React.FC<ResidentialFormProps> = ({ formData, handleInput
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      <div className="space-y-2">
       <h2 className="text-2xl font-bold text-gray-900">Residential Property Details</h2>
+      {formData.action === 'Sell' && (
+        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          Help us understand your property and your reasons for selling.
+        </p>
+      )}
+      {formData.action === 'Buy' && (
+        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          Help us find the perfect home for you by specifying your preferences.
+        </p>
+      )}
+      {formData.action === 'Rent' && (
+        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          Help us find the perfect rental property for you by specifying your preferences.
+        </p>
+      )}
+      </div>
       {formData.action === 'Sell' ? renderSellingFields() : renderBuyingOrRentingFields()}
     </div>
   );

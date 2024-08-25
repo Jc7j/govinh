@@ -28,7 +28,7 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Residential or Commercial? <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             <SelectCard
               label="Residential"
               value="Residential"
@@ -47,7 +47,7 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Purpose <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {['Primary', 'Investment', 'Vacation Home', 'Family Home'].map((purpose) => (
               <SelectCard
                 key={purpose}
@@ -63,7 +63,7 @@ export default function PropertyInfo({ formData, handleInputChange }: PropertyIn
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Buy, Sell, or Rent <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             {['Buy', 'Sell', 'Rent'].map((action) => (
               <SelectCard
                 key={action}

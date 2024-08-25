@@ -27,7 +27,7 @@ export default function CommercialForm({ formData, handleInputChange }: Commerci
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Type of Business <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {['Restaurant', 'Office', 'Retail', 'Warehouse', 'Land', 'Multifamily', 'Other'].map((type) => (
               <SelectCard
                 key={type}
@@ -43,7 +43,7 @@ export default function CommercialForm({ formData, handleInputChange }: Commerci
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Property Goals <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             {['Buy', 'Sell', 'Lease'].map((goal) => (
               <SelectCard
                 key={goal}
@@ -59,7 +59,7 @@ export default function CommercialForm({ formData, handleInputChange }: Commerci
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Purpose <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {['Personal Business', 'Investment'].map((purpose) => (
               <SelectCard
                 key={purpose}
@@ -105,7 +105,7 @@ export default function CommercialForm({ formData, handleInputChange }: Commerci
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Location <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {['Summerlin', 'Henderson', 'North', 'West', 'South', 'East', 'Southwest', 'Northwest'].map((location) => (
               <SelectCard
                 key={location}
