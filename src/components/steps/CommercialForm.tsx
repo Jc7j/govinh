@@ -99,6 +99,7 @@ export default function CommercialForm({ formData, handleInputChange }: Commerci
             placeholder="Total square feet"
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-800"
             required
+            min="0"
           />
         </div>
         <div>

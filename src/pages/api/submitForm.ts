@@ -61,6 +61,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Update 'Purpose' field (already exists in common fields)
       if (formData.purpose) properties['Purpose'] = { select: { name: formData.purpose } };
       
+      // Ensure 'Action' field is set based on 'Property Goals'
+      if (formData.propertyGoals) {
+        properties['Action'] = { select: { name: formData.propertyGoals } };
+      }
     }
 
     // Remove any undefined properties
